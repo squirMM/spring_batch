@@ -4,8 +4,7 @@ import org.springframework.batch.core.configuration.annotation.EnableBatchProces
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-/*배치를 실행하기 위해 필요한 어노테이션*/
-@EnableBatchProcessing
+@EnableBatchProcessing /*배치를 실행하기 위해 필요한 어노테이션*/
 @SpringBootApplication
 public class SpringBatchTutorialApplication {
 

@@ -1,7 +1,6 @@
-package com.example.SpringBatchTutorial.job;
+package com.example.SpringBatchTutorial.job.JobListener;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.StepContribution;
@@ -17,46 +16,49 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * JobListenerConfig
+ *
+ * @author squirMM
+ * @date 2023/12/27
+ */
 
 /**
- * desc: tasklet을 활용하여 Hello World를 출력
- * run: --job.name=helloWorldJob
+ * desc:
+ * run: --spring.batch.job.names=jobListenerJob
  */
-@Slf4j
 @Configuration
 @RequiredArgsConstructor
-public class HelloWorldJobConfig {
-
-    @Autowired
-    private JobBuilderFactory jobBuilderFactory;
-
-    @Autowired
-    private StepBuilderFactory stepBuilderFactory;
+public class JobListenerConfig {
+    private final JobBuilderFactory jobBuilderFactory;
+    private final StepBuilderFactory stepBuilderFactory;
 
     @Bean
-    public Job helloWorldJob() {
-        return jobBuilderFactory.get("helloWorldJob")
+    public Job jobListenerJob(Step jobListenerStep) {
+        return jobBuilderFactory.get("jobListenerJob")
                 .incrementer(new RunIdIncrementer())
-                .start(helloWorldStep())
+                .listener(new JobLoggerListener())
+                .start(jobListenerStep)
                 .build();
     }
 
     @JobScope
     @Bean
-    public Step helloWorldStep() {
-        return stepBuilderFactory.get("helloWorldStep")
-                .tasklet(helloWorldTasklet())
+    public Step jobListenerStep(Tasklet jobListenerTasklet) {
+        return stepBuilderFactory.get("jobListenerStep")
+                .tasklet(jobListenerTasklet)
                 .build();
     }
 
     @StepScope
     @Bean
-    public Tasklet helloWorldTasklet() {
+    public Tasklet jobListenerTasklet() {
         return new Tasklet() {
             @Override
             public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
-                System.out.println("Hello World Spring Batch");
+                System.out.println("jobListener Batch");
                 return RepeatStatus.FINISHED;
+//                throw new Exception("Failed"); // Fail 로거 보는 용도
             }
         };
     }
