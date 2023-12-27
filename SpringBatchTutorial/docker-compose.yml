@@ -4,13 +4,13 @@ services:
   mysql:
     container_name: spring_batch
     image: mysql:5.7
-    platform: linux/amd64         # no matching manifest for linux/arm64/v8 in the manifest list entries 해결
+    platform: linux/x86_64         # no matching manifest for linux/arm64/v8 in the manifest list entries 해결
     environment:
       MYSQL_DATABASE: "spring_batch"
       MYSQL_ROOT_PASSWORD: "password1234"
       TZ: "Asia/Seoul"
     ports:
-      - "3306:3306"
+      - "13306:3306"
     command:
       - "--character-set-server=utf8mb4"
       - "--collation-server=utf8mb4_unicode_ci"
